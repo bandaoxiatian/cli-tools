@@ -259,6 +259,7 @@ class AppStoreConnect(
         processing_state: Optional[BuildProcessingState] = None,
         beta_review_state: Optional[Union[BetaReviewState, Sequence[BetaReviewState]]] = None,
         build_version_number: Optional[int] = None,
+        app_store_version: Optional[Union[ResourceId, str]] = None,
         should_print: bool = True,
     ) -> List[Build]:
         """
@@ -278,6 +279,7 @@ class AppStoreConnect(
             beta_app_review_submission_beta_review_state=beta_review_state,
             version=build_version_number,
             pre_release_version_version=pre_release_version,
+            app_store_version=app_store_version,
         )
         return self._list_resources(builds_filter, self.api_client.builds, should_print)
 

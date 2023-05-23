@@ -6,6 +6,8 @@ from typing import Optional
 from typing import Sequence
 from typing import Set
 from typing import Union
+from typing import Tuple
+from typing import Dict
 
 from codemagic import cli
 from codemagic.apple.resources import App
@@ -257,8 +259,8 @@ class AppsActionGroup(AbstractBaseAction, metaclass=ABCMeta):
         application_id: ResourceId,
         platform: Optional[Platform] = None,
         review_submission_state: Optional[Union[ReviewSubmissionState, Sequence[ReviewSubmissionState]]] = None,
-        should_print: bool = True,
-    ) -> List[ReviewSubmission]:
+        should_print: bool = False,
+    ) -> Tuple[List[ReviewSubmission], List[Dict]]:
         """
         Find and list review submissions in App Store Connect for the given application
         """

@@ -10,6 +10,7 @@ from typing import Optional
 from typing import Sequence
 from typing import Tuple
 from typing import Union
+from typing import Dict
 
 from codemagic.apple import AppStoreConnectApiClient
 from codemagic.apple.app_store_connect import IssuerId
@@ -288,6 +289,16 @@ class AbstractBaseAction(ResourceManagerMixin, PathFinderMixin, metaclass=ABCMet
         from ..app_store_connect import AppStoreConnect
         _ = AppStoreConnect.list_builds  # Implementation
         raise NotImplementedError()
+    
+    @abstractmethod
+    def list_items_in_review_submission(
+        self,
+        review_submission_id: ResourceId,
+        should_print: bool = True,
+    ) -> Tuple[List[ReviewSubmissionItem], List[Dict]]:
+        from .action_groups import ReviewSubmissionsActionGroup
+        _ = ReviewSubmissionsActionGroup.list_items_in_review_submission  # Implementation
+        raise NotImplementedError()
 
     @abstractmethod
     def list_review_submissions(
@@ -296,7 +307,7 @@ class AbstractBaseAction(ResourceManagerMixin, PathFinderMixin, metaclass=ABCMet
         platform: Optional[Platform] = None,
         review_submission_state: Optional[Union[ReviewSubmissionState, Sequence[ReviewSubmissionState]]] = None,
         should_print: bool = True,
-    ) -> List[ReviewSubmission]:
+    ) -> Tuple[List[ReviewSubmission], List[Dict]]:
         from .action_groups import AppsActionGroup
         _ = AppsActionGroup.list_review_submissions  # Implementation
         raise NotImplementedError()

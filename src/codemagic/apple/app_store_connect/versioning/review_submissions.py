@@ -4,6 +4,8 @@ from typing import Optional
 from typing import Sequence
 from typing import Type
 from typing import Union
+from typing import Tuple
+from typing import Dict
 
 from codemagic.apple.app_store_connect.resource_manager import ResourceManager
 from codemagic.apple.resources import App
@@ -65,15 +67,22 @@ class ReviewSubmissions(ResourceManager[ReviewSubmission]):
         response = self.client.session.get(f'{self.client.API_URL}/reviewSubmissions/{review_submission_id}').json()
         return ReviewSubmission(response['data'])
 
-    def list(self, resource_filter: Filter = Filter()) -> List[ReviewSubmission]:
+    def list(self, resource_filter: Filter = Filter()) -> Tuple[List[ReviewSubmission], List[Dict]]:
         """
         https://developer.apple.com/documentation/appstoreconnectapi/get_v1_reviewsubmissions
         """
-        review_submissions = self.client.paginate(
+        # >>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<
+        params = resource_filter.as_query_params()
+        params["include"] = "app,appStoreVersionForReview,items"
+        paginate_result = self.client.paginate_with_included(
             f'{self.client.API_URL}/reviewSubmissions',
-            params=resource_filter.as_query_params(),
+            params=params,
         )
-        return [ReviewSubmission(submission_info) for submission_info in review_submissions]
+
+        review_submissions_list = paginate_result.data
+        included_list = paginate_result.included
+        review_submissions = [ReviewSubmission(submission_info) for submission_info in review_submissions_list]
+        return review_submissions, included_list
 
     def modify(
         self,

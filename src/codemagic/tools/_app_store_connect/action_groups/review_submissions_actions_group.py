@@ -1,11 +1,15 @@
 from __future__ import annotations
 
 from abc import ABCMeta
+from typing import List
+from typing import Dict
+from typing import Tuple
 
 from codemagic import cli
 from codemagic.apple.resources import Platform
 from codemagic.apple.resources import ResourceId
 from codemagic.apple.resources import ReviewSubmission
+from codemagic.apple.resources import ReviewSubmissionItem
 
 from ..abstract_base_action import AbstractBaseAction
 from ..action_group import AppStoreConnectActionGroup
@@ -94,4 +98,28 @@ class ReviewSubmissionsActionGroup(AbstractBaseAction, metaclass=ABCMeta):
             review_submission_id,
             should_print,
             submitted=True,
+        )
+    
+    @cli.action(
+        'list-items-in-review-submission',
+        ReviewSubmissionArgument.REVIEW_SUBMISSION_ID,
+        action_group=AppStoreConnectActionGroup.REVIEW_SUBMISSIONS,
+    )
+    def list_items_in_review_submission(
+        self,
+        review_submission_id: ResourceId,
+        should_print: bool = False,
+    ) -> Tuple[List[ReviewSubmissionItem], List[Dict]]:
+        """
+        List items in specific review submission
+        """
+
+        items_filter = self.api_client.review_submissions_items.Filter(
+            review_submission_id=review_submission_id
+            )
+        
+        return self._list_resources(
+            items_filter,
+            self.api_client.review_submissions_items,
+            should_print,
         )
