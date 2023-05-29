@@ -41,6 +41,7 @@ class Builds(ResourceManager[Build]):
         beta_app_review_submission_beta_review_state: Optional[Union[BetaReviewState, Sequence[BetaReviewState]]] = None
         version: Optional[Union[str, int]] = None
         pre_release_version_version: Optional[str] = None
+        app_store_version: Optional[Union[ResourceId, str]] = None
 
         @classmethod
         def _get_field_name(cls, field_name) -> str:
@@ -55,6 +56,7 @@ class Builds(ResourceManager[Build]):
         UPLOADED_DATE = 'uploadedDate'
         VERSION = 'version'
         BETA_REVIEW_STATE = 'betaReviewState'
+        APP_STORE_VERSION = 'appStoreVersion'
 
     def read(self, build: Union[LinkedResourceData, ResourceId]) -> Build:
         """

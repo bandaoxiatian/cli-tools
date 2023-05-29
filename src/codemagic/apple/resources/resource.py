@@ -202,11 +202,12 @@ class Resource(LinkedResourceData, metaclass=PrettyNameAbcMeta):
 
     @dataclass
     class Relationships(DictSerializable, GracefulDataclassMixin):
-        def __post_init__(self):
-            for field in self.__dict__:
-                value = getattr(self, field)
-                if not isinstance(value, (Relationship, type(None))):
-                    setattr(self, field, Relationship(**value))
+        pass
+        # def __post_init__(self):
+        #     for field in self.__dict__:
+        #         value = getattr(self, field)
+        #         if not isinstance(value, (Relationship, type(None))):
+        #             setattr(self, field, Relationship(**value))
 
     @classmethod
     def _create_attributes(cls, api_response) -> Attributes:
